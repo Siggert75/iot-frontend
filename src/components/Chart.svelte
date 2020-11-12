@@ -19,13 +19,13 @@
         return ee;
     }
 
-    let temps;
+    let temps = getTemp();
 
-    onMount(() => {
-        temps = getTemp();
-    });
+    const updateTemp = () => {
+        temps = getTemp()
+    }
 
-    //setInterval(updateTemp, 1000*60);
+    setInterval(updateTemp, 1000*60);
 
     let yolo = [
     {
@@ -75,6 +75,14 @@
     
 </script>
 
+{#await temps}
+	<p>...waiting</p>
+{:then value}
+    <SvelteFC {...getChartConfig(value, yolo)}/>
+{:catch error}
+	<p style="color: red">{error.message}</p>
+{/await}
+<h1>Mock data chart (Real chart should come above)</h1>
 <div id="chart-container">
     <SvelteFC {...getChartConfig(gg, yolo)}/>
 </div>
